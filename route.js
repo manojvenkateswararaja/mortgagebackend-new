@@ -516,44 +516,41 @@ module.exports = router => {
                                     });
 
                                         router.post('/updatetransaction', cors(), (req, res) => {
-                                            console.log("entering in to the upda trans");
-
-                                            var requestid = req.body.requestid;
-                                            var transactionstring = req.body.transactionstring;
+                                            console.log("entering in to the upda trans",req.body);
+    
+                                            var body = req.body
+                                            var requestid = body.id;
+                                            var transactionstring = body.transactionstring;
                                             
-                                            console.log("entering in to the upda trans",requestid);
-
+                                            console.log("entering in to the upda trans",requestid,transactionstring);
+    
                                                 creditscore
                                                 .creditscore(requestid)
                                                 .then(results => {
                                                    console.log(results.creditscore);
                                                     var creditscore = results.creditscore
-                                                    console.log(creditscore);
-
+                                                    console.log("transactionstring",transactionstring);
+                                                    console.log("transactionstring",req.body.creditscore);
+    
                                                     var updatedString = ""
-                                                    if(transactionstring.creditscore == ""){
+                                                    if(body.creditscore == ""){
                                                         console.log("creditscore ++++++++++>>>>>");
                                                     updatedString= {
-                                                        "loanamount":transactionstring.loanamount,
-                                                        "loanterms": transactionstring.loanterms,
-                                                        "amountinterestrate":transactionstring.amountinterestrate,
-                                                        "paymentperyear" : transactionstring.paymentperyear,
-                                                        "installmentpermonth": transactionstring.installmentpermonth,
-                                                        "creditscore":"",
+            
+                                                        "creditscore":""
                                                     } 
+                                            
                                                 }
                                                 else{
                                                     console.log("creditscore notnull ++++++++++>>>>>");
                                                     
                                                     updatedString= {
-                                                        "loanamount":transactionstring.loanamount,
-                                                        "loanterms": transactionstring.loanterms,
-                                                        "amountinterestrate":transactionstring.amountinterestrate,
-                                                        "paymentperyear" : transactionstring.paymentperyear,
-                                                        "installmentpermonth": transactionstring.installmentpermonth,
-                                                        "creditscore": creditscore,
-                                                    }                                                     
-                                                }
+    
+                                                        "creditscore": creditscore
+                                                    }
+                                                    
+                                                
+                                                } 
                                                 updatetransaction
                                                 .updatetransaction(requestid,updatedString)
                                                 .then(function(result) {
@@ -561,17 +558,20 @@ module.exports = router => {
                                     
                                                     res.send({
                                     
-                                                        message: result.message
+                                                        message: result.message,
+                                                        creditscore:result.creditscore
                                                     });
                                                 })
                                             
                                                 .catch(err => res.status(err.status).json({
                                                     message: err.message
                                                 }));
-                                            
+                                                
                                         })
                                             
-                                        });  
+                                        });
+    
+    
 
                                         router.get("/readIndex", cors(), (req, res) => {
                                             
